@@ -16,12 +16,13 @@ def  main(page: ft.Page):
     response_text = ft.Text(value="")
     response_status = ft.Text(value="")
     
+    
     def send_request(e):
         try:
-            
             request_options = {
                 "method": method.value,
-                "url": url.value,
+                "url": "https://jsonplaceholder.typicode.com/posts/1",
+                # "url": url.value,
                 "timeout": 10,
                 "allow_redirects": False
             }
