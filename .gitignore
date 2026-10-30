@@ -1,0 +1,8 @@
+.venv
+.DS_Store
+__pycache__/
+.flet/
+.flet_tool/
+.flutter_tool/
+.flutter-plugins
+.flutter-plugins-dependencies
