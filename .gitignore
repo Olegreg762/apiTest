@@ -6,3 +6,4 @@ __pycache__/
 .flutter_tool/
 .flutter-plugins
 .flutter-plugins-dependencies
+.env

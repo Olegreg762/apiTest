@@ -10,15 +10,31 @@ def  main(page: ft.Page):
         width = 130,
         value = "GET",
         options = [ft.dropdown.Option(key=m, text=m) for m in http_methods],
-            
     )
+    payload = ft.TextField(label="Enter Payload (JSON)", expand=True, multiline=True)
     url = ft.TextField(label="Enter API URL", expand=True)
     response_text = ft.Text(value="")
     response_status = ft.Text(value="")
     
     def send_request(e):
         try:
-            response = requests.request(method.value, url.value, timeout=10)
+            
+            request_options = {
+                "method": method.value,
+                "url": url.value,
+                "timeout": 10,
+                "allow_redirects": False
+            }
+            if method.value in ["POST", "PUT", "PATCH"] and payload.value.strip():
+                try:
+                    request_options["json"] = json.loads(payload.value)
+                except json.JSONDecodeError as ex:
+                    response_text.value = f"Invalid JSON in payload for {method.value} method: {ex}"
+                    response_status.value = "Invalid Request Body"
+                    response_status.color = ft.Colors.RED
+                    return
+                
+            response = requests.request(**request_options)
             try:
                 response_text.value = json.dumps(response.json(), indent=4)
             except requests.exceptions.JSONDecodeError:
@@ -50,6 +66,11 @@ def  main(page: ft.Page):
                     controls =[
                         method,
                         url,
+                    ],
+                ),
+                ft.Row(
+                    controls =[
+                        payload,
                         ft.Button("Send Request", on_click=send_request)
                     ],
                 ),
